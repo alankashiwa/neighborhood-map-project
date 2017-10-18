@@ -1,4 +1,6 @@
-// Google Map Init Function
+/* Map Creation Script */
+
+// Map Styles
 var mapStyles = [
   {
     "elementType": "geometry",
@@ -214,16 +216,63 @@ var mapStyles = [
     ]
   }
 ]
+
+// Map Options : Omori
 var mapOptionsOmori = {
   center: {lat: 35.587877, lng: 139.732728},
   zoom: 16,
-  styles: mapStyles
+  maxZoom: 20,
+  minZoom: 14,
+  styles: mapStyles,
+  scrollWheel: false
 }
+
+// Map Options : Yanaka
 var mapOptionsYanaka = {
   center: {lat: 35.7276552, lng: 139.7646081},
   zoom: 16,
-  styles: mapStyles
+  maxZoom: 20,
+  minZoom: 14,
+  styles: mapStyles,
+  scrollWheel: false
 }
+
+// Set current map option
+var currentMapOptions = mapOptionsOmori;
+
+// Place Info
+var places = [
+  {title: 'Disco Corporation', location: {lat: 35.5868164, lng: 139.7318569}},
+  {title: 'Ito Yokado Supermarket', location: {lat: 35.5868164, lng: 139.7318569}},
+  {title: 'Ootoya', location: {lat: 35.587528, lng: 139.7314008}},
+  {title: 'Denny\'s', location: {lat: 35.5859226, lng: 139.7301884}},
+  {title: 'Omori Belport', location: {lat: 35.5879549, lng: 139.7309301}},
+  {title: 'Isuzu Hospital', location: {lat: 35.5892769, lng: 139.7320033}},
+  {title: 'Kisoji', location: {lat: 35.5877367, lng: 139.732823}},
+  {title: 'On-Yasai', location: {lat: 35.5890096, lng: 139.7291102}},
+  {title: 'Hokkaidou', location: {lat: 35.5876408, lng: 139.7276946}},
+  {title: 'Tully\'s', location: {lat: 35.5876408, lng: 139.7276946}},
+  {title: 'Ueshima Coffee', location: {lat: 35.5876408, lng: 139.7252711}},
+  {title: 'Doutor Coffee Shop', location: {lat: 35.5872371, lng: 139.7270717}},
+]
+
+// Marker Array
+var map;
+var markers = [];
+
+// Initiate the map
 var initMap = function() {
-  map = new google.maps.Map(document.getElementById('map'), mapOptionsYanaka);
+  map = new google.maps.Map(document.getElementById('map'), currentMapOptions);
+  for (var i = 0; i < places.length; i++) {
+    var position = places[i].location;
+    var title = places[i].title;
+    var marker = new google.maps.Marker({
+      position: position,
+      title: title,
+      map: map,
+      animation: google.maps.Animation.DROP,
+      id: i
+    });
+    markers.push(marker);
+  }
 }
