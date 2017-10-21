@@ -45,3 +45,46 @@ input {
   padding: 8px;
   list-style-type: none;
 }
+.hamburger-menu {
+  display: none;
+  float: right;
+  margin: 15px 3px;
+}
+.hamburger-menu div {
+  width: 35px;
+  height: 5px;
+  background-color: black;
+  margin: 5px 10px;
+}
+#toggle-menu {
+  display: none;
+}
+input[type=checkbox] {
+  display: none;
+}
+input[type=checkbox]:checked~#side-panel{
+  display: block;
+}
+
+@media screen and (max-width: 700px) {
+  #map {
+    left: 0px;
+    z-index: -1;
+  }
+  .side-panel-heading,
+  .filter,
+  .spot-list {
+    width: 90%;
+  }
+  #side-panel {
+    display: none;
+    z-index: 1;
+  }
+  .hamburger-menu {
+    background-color: #AAA;
+    opacity: 0.5;
+    margin: 10px;
+    display: block;
+    z-index: 2;
+  }
+}

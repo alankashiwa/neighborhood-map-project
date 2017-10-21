@@ -9,8 +9,14 @@
   </head>
 
   <body>
-    <aside id="side-panel">
-      <h3 class="side-panel-heading">Omori Map</h3>
+    <label for="toggle-menu" class="hamburger-menu">
+      <div></div><div></div><div></div>
+    </label>
+    <input type="checkbox" id="toggle-menu" role="button">
+    <nav id="side-panel">
+      <h3 class="side-panel-heading">
+        Omori Map
+      </h3>
       <div class="filter">
         <input id="filter-text" type="text" placeholder="Enter the place you want to visit!">
         <input id="filter-button" type="button" value="filter" data-bind="click: filterSpot">
@@ -18,9 +24,9 @@
       <ul class="spot-list" data-bind="foreach: places, click: selectSpot">
         <li data-bind="text: title"></li>
       </ul>
-    </aside>
-    <section id="map">
-    </section>
+    </nav>
+    <main id="map">
+    </main>
     <script src="js/jquery-3.2.1.js"></script>
     <script src="js/knockout-3.4.2.js"></script>
     <script src="js/map.js"></script>
