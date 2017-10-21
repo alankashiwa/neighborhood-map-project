@@ -224,6 +224,7 @@ var mapOptionsOmori = {
   maxZoom: 20,
   minZoom: 14,
   styles: mapStyles,
+  mapTypeControl: false,
   scrollWheel: false
 }
 
@@ -256,13 +257,19 @@ var places = [
   {title: 'Doutor Coffee Shop', location: {lat: 35.5872371, lng: 139.7270717}},
 ]
 
-// Marker Array
-var map;
-var markers = [];
-
 // Initiate the map
-var initMap = function() {
-  map = new google.maps.Map(document.getElementById('map'), currentMapOptions);
+function initMap() {
+  var map = new google.maps.Map(document.getElementById('map'), currentMapOptions);
+  var markerColor = '80b3ff';
+  var defaultMarker = new google.maps.MarkerImage(
+    'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor +
+    '|40|_|%E2%80%A2',
+    new google.maps.Size(21,34),
+    new google.maps.Point(0,0),
+    new google.maps.Point(10,34),
+    new google.maps.Size(21,34)
+  );
+  var infowindow = new google.maps.InfoWindow();
   for (var i = 0; i < places.length; i++) {
     var position = places[i].location;
     var title = places[i].title;
@@ -270,9 +277,23 @@ var initMap = function() {
       position: position,
       title: title,
       map: map,
+      icon: defaultMarker,
       animation: google.maps.Animation.DROP,
       id: i
     });
-    markers.push(marker);
+    marker.addListener('click', function() {
+      populateInfoWindow(this, infowindow);
+    });
+  }
+}
+
+function populateInfoWindow(marker, infowindow) {
+  if(infowindow.marker != marker) {
+    infowindow.marker = marker;
+    infowindow.setContent('<div>' + marker.title + '</div>');
+    infowindow.open(map, marker);
+    infowindow.addListener('closeclick', function(){
+      infowindow.setMarker(null);
+    });
   }
 }
