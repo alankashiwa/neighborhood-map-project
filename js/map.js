@@ -273,8 +273,9 @@ function initMap() {
 function Restaurant(data) {
   var self = this;
 
-  self.title = data.title;
+  self.title = ko.observable(data.title);
   self.location = data.location;
+
   self.foursquareId = data.id;
 
   // Create markers
@@ -289,7 +290,7 @@ function Restaurant(data) {
   );
   self.marker = new google.maps.Marker({
     position: self.location,
-    title: self.title,
+    title: self.title(),
     map: map,
     icon: defaultMarker,
     animation: google.maps.Animation.DROP,
@@ -307,7 +308,7 @@ function Restaurant(data) {
     url: requestUrl,
     dataType: 'json'
   }).done(function(jsonData){
-    self.content = '<h4>' + self.title + '</h4>';
+    self.content = '<h4>' + self.title() + '</h4>';
     self.content += '<img src="' + jsonData.response.venue.bestPhoto.prefix + '90x90' + jsonData.response.venue.bestPhoto.suffix +'">';
     self.content += '<hr>'
     self.content += '<div>' + jsonData.response.venue.categories[0].name + '</div>'
@@ -350,12 +351,17 @@ function ViewModel() {
   self.filter = ko.observable();
   self.filterRestaurants = ko.computed(function(){
     var currentFilter = self.filter();
+    hideMarkers(self.restaurants()); // Hide all the markers
     if(!currentFilter) {
+      displayMarkers(self.restaurants());
       return self.restaurants();
     } else {
-      return ko.utils.arrayFilter(self.restaurants(), function(restaurant){
+      // Create filtered restaurant array
+      var matchedRestaurants = ko.utils.arrayFilter(self.restaurants(), function(restaurant){
         return restaurant.title().toLowerCase().indexOf(currentFilter.toLowerCase()) != -1;
       });
+      displayMarkers(matchedRestaurants);
+      return matchedRestaurants;
     }
   });
 }
@@ -368,5 +374,17 @@ function populateInfoWindow(marker, content) {
     infowindow.addListener('closeclick', function(){
       infowindow.marker = null;
     });
+  }
+}
+
+function displayMarkers(restaurants) {
+  for (var i = 0; i < restaurants.length; i++) {
+    restaurants[i].marker.setMap(map);
+  }
+}
+
+function hideMarkers(restaurants) {
+  for (var i = 0; i < restaurants.length; i++) {
+    restaurants[i].marker.setMap(null);
   }
 }
