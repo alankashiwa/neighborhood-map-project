@@ -242,12 +242,12 @@ var mapOptionsYanaka = {
 // Set current map option
 var currentMapOptions = mapOptionsOmori;
 
-// Restaurant Info
+// Restaurant Info : latlng and id data are from Foursquare
 var restaurantsData = [
   {title: '大戸屋 Ootoya', location: {lat: 35.58734058717389, lng: 139.73241716181437}, id: '4bc5a9fd0a30d13a97415a9c'},
   {title: 'Denny\'s', location: {lat: 35.5845898189555, lng: 139.7306578419401}, id: '4b6e6153f964a520feba2ce3'},
   {title: 'しゃぶしゃぶ温野菜', location: {lat: 35.589488100314725, lng: 139.72953973982644}, id: '4b9a2766f964a520a1a135e3'},
-  {title: '俺のフレンチ・イタリアン', location: {lat: 35.58653348246824, lng: 139.72759464576816}, id: '5363371f498e3a921359cde7'},
+  {title: '俺のイタリアン', location: {lat: 35.58653348246824, lng: 139.72759464576816}, id: '5363371f498e3a921359cde7'},
   {title: 'タパス&タパス', location: {lat: 35.588222732986345, lng: 139.72725430601648}, id: '4ca7284497c8a1cd6e2c77a5'},
   {title: 'さぼてん', location: {lat: 35.587917956758695, lng: 139.7311368983994}, id: '4d0ecfa08d9ca143785daec5'},
   {title: '天冨久', location: {lat: 35.58527345805132, lng: 139.72924694992201}, id: '4d9ef55a9bf0a35d6c67050b'},
@@ -256,10 +256,10 @@ var restaurantsData = [
   {title: 'Kirin City', location: {lat: 35.588532861908284, lng: 139.72731089449988}, id: '4b5edd97f964a520849b29e3'}
 ]
 
-
+// Global map and infowindow variables
 var map;
-var markers = [];
 var infowindow;
+
 // Initiate the map
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), currentMapOptions);
@@ -317,8 +317,6 @@ function Restaurant(data) {
   }).fail(function(){
     self.content = '<h4>Info not found.</h4>'
   });
-  // Create InfoWindow
-  //var infowindow = new google.maps.InfoWindow();
 
   // Set marker click event
   self.marker.addListener('click', function(){
