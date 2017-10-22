@@ -33,11 +33,9 @@ input {
 .filter{
   padding: 10px;
 }
-#filter-button {
-  width: 25%;
-}
 #filter-text {
-  width: 70%;
+  width: 95%;
+  text-align: center;
 }
 .spot-list li {
   color: #EEE;

@@ -1,4 +1,5 @@
 /* Map Creation Script */
+'use strict';
 
 // Map Styles
 var mapStyles = [
@@ -241,25 +242,38 @@ var mapOptionsYanaka = {
 // Set current map option
 var currentMapOptions = mapOptionsOmori;
 
-// Place Info
-var places = [
-  {title: 'Disco Corporation', location: {lat: 35.5868164, lng: 139.7318569}},
-  {title: 'Ito Yokado Supermarket', location: {lat: 35.5868164, lng: 139.7318569}},
-  {title: 'Ootoya', location: {lat: 35.587528, lng: 139.7314008}},
-  {title: 'Denny\'s', location: {lat: 35.5859226, lng: 139.7301884}},
-  {title: 'Omori Belport', location: {lat: 35.5879549, lng: 139.7309301}},
-  {title: 'Isuzu Hospital', location: {lat: 35.5892769, lng: 139.7320033}},
-  {title: 'Kisoji', location: {lat: 35.5877367, lng: 139.732823}},
-  {title: 'On-Yasai', location: {lat: 35.5890096, lng: 139.7291102}},
-  {title: 'Hokkaidou', location: {lat: 35.5876408, lng: 139.7276946}},
-  {title: 'Tully\'s', location: {lat: 35.5876408, lng: 139.7276946}},
-  {title: 'Ueshima Coffee', location: {lat: 35.5876408, lng: 139.7252711}},
-  {title: 'Doutor Coffee Shop', location: {lat: 35.5872371, lng: 139.7270717}},
+// Restaurant Info
+var restaurantsData = [
+  {title: '大戸屋 Ootoya', location: {lat: 35.58734058717389, lng: 139.73241716181437}, id: '4bc5a9fd0a30d13a97415a9c'},
+  {title: 'Denny\'s', location: {lat: 35.5845898189555, lng: 139.7306578419401}, id: '4b6e6153f964a520feba2ce3'},
+  {title: 'しゃぶしゃぶ温野菜', location: {lat: 35.589488100314725, lng: 139.72953973982644}, id: '4b9a2766f964a520a1a135e3'},
+  {title: '俺のフレンチ・イタリアン', location: {lat: 35.58653348246824, lng: 139.72759464576816}, id: '5363371f498e3a921359cde7'},
+  {title: 'タパス&タパス', location: {lat: 35.588222732986345, lng: 139.72725430601648}, id: '4ca7284497c8a1cd6e2c77a5'},
+  {title: 'さぼてん', location: {lat: 35.587917956758695, lng: 139.7311368983994}, id: '4d0ecfa08d9ca143785daec5'},
+  {title: '天冨久', location: {lat: 35.58527345805132, lng: 139.72924694992201}, id: '4d9ef55a9bf0a35d6c67050b'},
+  {title: '大森鳥久', location: {lat: 35.586687301815346, lng: 139.7280540012856}, id: '4f9cb216e4b0873b67b5effd'},
+  {title: 'タニ・キッチン', location: {lat: 35.59425917028064, lng: 139.7296166399365}, id: '4c6df85c06ed6dcb50aea522'}
 ]
 
+
+var map;
+var markers = [];
 // Initiate the map
 function initMap() {
-  var map = new google.maps.Map(document.getElementById('map'), currentMapOptions);
+  map = new google.maps.Map(document.getElementById('map'), currentMapOptions);
+  var viewModel = new ViewModel();
+  ko.applyBindings(viewModel);
+}
+
+// Restaurant class
+function Restaurant(data) {
+  var self = this;
+
+  self.title = ko.observable(data.title);
+  self.location = ko.observable(data.location);
+  self.foursquareId = ko.observable(data.id);
+
+  // Create markers
   var markerColor = '80b3ff';
   var defaultMarker = new google.maps.MarkerImage(
     'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor +
@@ -269,28 +283,79 @@ function initMap() {
     new google.maps.Point(10,34),
     new google.maps.Size(21,34)
   );
+  self.marker = new google.maps.Marker({
+    position: data.location,
+    title: data.title,
+    map: map,
+    icon: defaultMarker,
+    animation: google.maps.Animation.DROP,
+  });
+
+  // Get content from foursquare api
+  var foursquareApi = 'https://api.foursquare.com/v2/venues/' + data.id + '?';
+  var params = $.param({
+    'client_id': 'FU3Y2HVXH2YJVAEVDLURJP1HBDAQQGS2VLAB0MMXYUBB35GI',
+    'client_secret': 'OQCXUVQZXJUYIWO4AK25GBG5G4CAA2FDUQBV5KG14BA2RRL5',
+    'v': '20171010'
+  });
+  var requestUrl = foursquareApi + params;
+  $.ajax({
+    url: requestUrl,
+    dataType: 'json'
+  }).done(function(jsonData){
+    self.content = '<h3>' + data.title + '</h3>';
+    self.content += '<img src="' + jsonData.response.venue.bestPhoto.prefix + '100x100' + jsonData.response.venue.bestPhoto.suffix +'">';
+  }).fail(function(){
+    self.content = '<h3>Info not found.</h3>'
+  });
+  // Create InfoWindow
   var infowindow = new google.maps.InfoWindow();
-  for (var i = 0; i < places.length; i++) {
-    var position = places[i].location;
-    var title = places[i].title;
-    var marker = new google.maps.Marker({
-      position: position,
-      title: title,
-      map: map,
-      icon: defaultMarker,
-      animation: google.maps.Animation.DROP,
-      id: i
-    });
-    marker.addListener('click', function() {
-      populateInfoWindow(this, infowindow);
-    });
+
+  // Set marker click event
+  self.marker.addListener('click', function(){
+    populateInfoWindow(this, infowindow, self.content);
+    // Bounce animation
+    self.marker.setAnimation(google.maps.Animation.BOUNCE);
+    setTimeout(function(){
+      self.marker.setAnimation(null);
+    }, 2750);
+  });
+
+  // Trigger marker click event from the list
+  self.listClick = function() {
+    google.maps.event.trigger(self.marker, 'click');
   }
 }
 
-function populateInfoWindow(marker, infowindow) {
+// Knockout viewModel
+function ViewModel() {
+  var self = this;
+
+  // Observable Array for restaurants
+  self.restaurants = ko.observableArray([]);
+  restaurantsData.forEach(function(restaurant){
+    restaurant = new Restaurant(restaurant);
+    self.restaurants.push(restaurant);
+  });
+
+  // Filter
+  self.filter = ko.observable();
+  self.filterRestaurants = ko.computed(function(){
+    var currentFilter = self.filter();
+    if(!currentFilter) {
+      return self.restaurants();
+    } else {
+      return ko.utils.arrayFilter(self.restaurants(), function(restaurant){
+        return restaurant.title().toLowerCase().indexOf(currentFilter.toLowerCase()) != -1;
+      });
+    }
+  });
+}
+
+function populateInfoWindow(marker, infowindow, content) {
   if(infowindow.marker != marker) {
     infowindow.marker = marker;
-    infowindow.setContent('<div>' + marker.title + '</div>');
+    infowindow.setContent(content);
     infowindow.open(map, marker);
     infowindow.addListener('closeclick', function(){
       infowindow.setMarker(null);

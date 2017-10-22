@@ -18,11 +18,10 @@
         Omori Map
       </h3>
       <div class="filter">
-        <input id="filter-text" type="text" placeholder="Enter the place you want to visit!">
-        <input id="filter-button" type="button" value="filter" data-bind="click: filterSpot">
+        <input id="filter-text" type="text" placeholder="Enter the place you want to visit!" data-bind="value: filter, valueUpdate: 'afterkeydown'">
       </div>
-      <ul class="spot-list" data-bind="foreach: places, click: selectSpot">
-        <li data-bind="text: title"></li>
+      <ul class="spot-list" data-bind="foreach: filterRestaurants">
+        <li data-bind="text: title, click: listClick"></li>
       </ul>
     </nav>
     <main id="map">
@@ -30,7 +29,6 @@
     <script src="js/jquery-3.2.1.js"></script>
     <script src="js/knockout-3.4.2.js"></script>
     <script src="js/map.js"></script>
-    <script src="js/viewModel.js"></script>
     <script async defer
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuSaUzr_59U4mq5WWNqKM9WIkXHAcHjBE&libraries=places,drawing,geometry&v=3&callback=initMap">
     </script>
