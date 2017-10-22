@@ -269,9 +269,9 @@ function initMap() {
 function Restaurant(data) {
   var self = this;
 
-  self.title = ko.observable(data.title);
-  self.location = ko.observable(data.location);
-  self.foursquareId = ko.observable(data.id);
+  self.title = data.title;
+  self.location = data.location;
+  self.foursquareId = data.id;
 
   // Create markers
   var markerColor = '80b3ff';
@@ -284,15 +284,15 @@ function Restaurant(data) {
     new google.maps.Size(21,34)
   );
   self.marker = new google.maps.Marker({
-    position: data.location,
-    title: data.title,
+    position: self.location,
+    title: self.title,
     map: map,
     icon: defaultMarker,
     animation: google.maps.Animation.DROP,
   });
 
   // Get content from foursquare api
-  var foursquareApi = 'https://api.foursquare.com/v2/venues/' + data.id + '?';
+  var foursquareApi = 'https://api.foursquare.com/v2/venues/' + self.foursquareId + '?';
   var params = $.param({
     'client_id': 'FU3Y2HVXH2YJVAEVDLURJP1HBDAQQGS2VLAB0MMXYUBB35GI',
     'client_secret': 'OQCXUVQZXJUYIWO4AK25GBG5G4CAA2FDUQBV5KG14BA2RRL5',
@@ -303,7 +303,7 @@ function Restaurant(data) {
     url: requestUrl,
     dataType: 'json'
   }).done(function(jsonData){
-    self.content = '<h4>' + data.title + '</h4>';
+    self.content = '<h4>' + self.title + '</h4>';
     self.content += '<img src="' + jsonData.response.venue.bestPhoto.prefix + '90x90' + jsonData.response.venue.bestPhoto.suffix +'">';
     self.content += '<hr>'
     self.content += '<div>' + jsonData.response.venue.categories[0].name + '</div>'
