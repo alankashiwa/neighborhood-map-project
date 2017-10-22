@@ -386,3 +386,8 @@ function hideMarkers(restaurants) {
     restaurants[i].marker.setMap(null);
   }
 }
+
+// Error handler for google map
+function mapErrorHandler() {
+  alert('Google Map failed to render. Please try again later.');
+}
