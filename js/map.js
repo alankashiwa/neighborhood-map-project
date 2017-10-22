@@ -303,10 +303,14 @@ function Restaurant(data) {
     url: requestUrl,
     dataType: 'json'
   }).done(function(jsonData){
-    self.content = '<h3>' + data.title + '</h3>';
-    self.content += '<img src="' + jsonData.response.venue.bestPhoto.prefix + '100x100' + jsonData.response.venue.bestPhoto.suffix +'">';
+    self.content = '<h4>' + data.title + '</h4>';
+    self.content += '<img src="' + jsonData.response.venue.bestPhoto.prefix + '90x90' + jsonData.response.venue.bestPhoto.suffix +'">';
+    self.content += '<hr>'
+    self.content += '<div>' + jsonData.response.venue.categories[0].name + '</div>'
+    self.content += '<div>' + jsonData.response.venue.location.address + '</div>'
+    self.content += '<div>' + jsonData.response.venue.contact.formattedPhone + '</div>'
   }).fail(function(){
-    self.content = '<h3>Info not found.</h3>'
+    self.content = '<h4>Info not found.</h4>'
   });
   // Create InfoWindow
   var infowindow = new google.maps.InfoWindow();
@@ -358,7 +362,7 @@ function populateInfoWindow(marker, infowindow, content) {
     infowindow.setContent(content);
     infowindow.open(map, marker);
     infowindow.addListener('closeclick', function(){
-      infowindow.setMarker(null);
+      infowindow.marker = null;
     });
   }
 }
