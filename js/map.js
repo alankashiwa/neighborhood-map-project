@@ -252,15 +252,19 @@ var restaurantsData = [
   {title: 'さぼてん', location: {lat: 35.587917956758695, lng: 139.7311368983994}, id: '4d0ecfa08d9ca143785daec5'},
   {title: '天冨久', location: {lat: 35.58527345805132, lng: 139.72924694992201}, id: '4d9ef55a9bf0a35d6c67050b'},
   {title: '大森鳥久', location: {lat: 35.586687301815346, lng: 139.7280540012856}, id: '4f9cb216e4b0873b67b5effd'},
-  {title: 'タニ・キッチン', location: {lat: 35.59425917028064, lng: 139.7296166399365}, id: '4c6df85c06ed6dcb50aea522'}
+  {title: 'タニ・キッチン', location: {lat: 35.59425917028064, lng: 139.7296166399365}, id: '4c6df85c06ed6dcb50aea522'},
+  {title: 'Kirin City', location: {lat: 35.588532861908284, lng: 139.72731089449988}, id: '4b5edd97f964a520849b29e3'}
 ]
 
 
 var map;
 var markers = [];
+var infowindow;
 // Initiate the map
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), currentMapOptions);
+  // Create InfoWindow
+  infowindow = new google.maps.InfoWindow();
   var viewModel = new ViewModel();
   ko.applyBindings(viewModel);
 }
@@ -313,11 +317,11 @@ function Restaurant(data) {
     self.content = '<h4>Info not found.</h4>'
   });
   // Create InfoWindow
-  var infowindow = new google.maps.InfoWindow();
+  //var infowindow = new google.maps.InfoWindow();
 
   // Set marker click event
   self.marker.addListener('click', function(){
-    populateInfoWindow(this, infowindow, self.content);
+    populateInfoWindow(this, self.content);
     // Bounce animation
     self.marker.setAnimation(google.maps.Animation.BOUNCE);
     setTimeout(function(){
@@ -356,7 +360,7 @@ function ViewModel() {
   });
 }
 
-function populateInfoWindow(marker, infowindow, content) {
+function populateInfoWindow(marker, content) {
   if(infowindow.marker != marker) {
     infowindow.marker = marker;
     infowindow.setContent(content);
