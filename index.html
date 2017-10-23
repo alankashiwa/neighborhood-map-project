@@ -10,7 +10,7 @@
 
   <body>
     <label for="toggle-menu" class="hamburger-menu">
-      <div></div><div></div><div></div>
+      <span>MENU</span>
     </label>
     <input type="checkbox" id="toggle-menu" role="button">
     <nav id="side-panel">
@@ -21,7 +21,7 @@
         <input id="filter-text" type="text" placeholder="Enter the restaurant you want to visit!" data-bind="value: filter, valueUpdate: 'afterkeydown'">
       </div>
       <ul class="spot-list" data-bind="foreach: filterRestaurants">
-        <a href="#"><li data-bind="text: title, click: listClick"></li></a>
+        <li data-bind="text: title, click: listClick"></li>
       </ul>
     </nav>
     <main id="map">

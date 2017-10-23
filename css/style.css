@@ -1,14 +1,11 @@
 html,
 body {
+  font-family: "Comic Sans MS", Arial, sans-serif;
   height: 100%;
   margin: 0;
   padding: 0;
 }
-input {
-  font-family: "Comic Sans MS", Arial, sans-serif;
-}
 .side-panel-heading {
-  font-family: "Comic Sans MS", Arial, sans-serif;
   text-align: center;
   background-color: #444;
   color: #FFF;
@@ -51,11 +48,13 @@ input {
   float: right;
   margin: 15px 3px;
 }
-.hamburger-menu div {
+.hamburger-menu span {
   width: 35px;
   height: 5px;
-  background-color: black;
-  margin: 5px 10px;
+  color: #FFF;
+  background-color: #111;
+  padding: 10px 10px;
+  border-radius: 5px;
 }
 #toggle-menu {
   display: none;
@@ -83,8 +82,8 @@ input[type=checkbox]:checked~#side-panel{
   }
   .hamburger-menu {
     background-color: #AAA;
-    opacity: 0.5;
-    margin: 10px;
+    opacity: 0.7;
+    margin: 30px;
     display: block;
     z-index: 2;
   }
