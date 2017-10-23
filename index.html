@@ -21,7 +21,7 @@
         <input id="filter-text" type="text" placeholder="Enter the restaurant you want to visit!" data-bind="value: filter, valueUpdate: 'afterkeydown'">
       </div>
       <ul class="spot-list" data-bind="foreach: filterRestaurants">
-        <li data-bind="text: title, click: listClick"></li>
+        <a href="#"><li data-bind="text: title, click: listClick"></li></a>
       </ul>
     </nav>
     <main id="map">

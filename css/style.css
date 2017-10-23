@@ -43,6 +43,9 @@ input {
   padding: 8px;
   list-style-type: none;
 }
+.spot-list a {
+   text-decoration: none;
+}
 .hamburger-menu {
   display: none;
   float: right;
