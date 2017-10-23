@@ -1,4 +1,4 @@
-/* jshint unused:true */
+/* jshint unused:false */
 /* globals $:false, google:false, ko: false */
 
 // Map Styles
