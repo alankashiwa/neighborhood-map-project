@@ -1,5 +1,5 @@
-/* Map Creation Script */
-'use strict';
+/* jshint unused:true */
+/* globals $:false, google:false, ko: false */
 
 // Map Styles
 var mapStyles = [
@@ -216,7 +216,7 @@ var mapStyles = [
       }
     ]
   }
-]
+];
 
 // Map Options : Omori
 var mapOptionsOmori = {
@@ -227,17 +227,7 @@ var mapOptionsOmori = {
   styles: mapStyles,
   mapTypeControl: false,
   scrollWheel: false
-}
-
-// Map Options : Yanaka
-var mapOptionsYanaka = {
-  center: {lat: 35.7276552, lng: 139.7646081},
-  zoom: 16,
-  maxZoom: 20,
-  minZoom: 14,
-  styles: mapStyles,
-  scrollWheel: false
-}
+};
 
 // Set current map option
 var currentMapOptions = mapOptionsOmori;
@@ -254,7 +244,7 @@ var restaurantsData = [
   {title: '大森鳥久', location: {lat: 35.586687301815346, lng: 139.7280540012856}, id: '4f9cb216e4b0873b67b5effd'},
   {title: 'タニ・キッチン', location: {lat: 35.59425917028064, lng: 139.7296166399365}, id: '4c6df85c06ed6dcb50aea522'},
   {title: 'Kirin City', location: {lat: 35.588532861908284, lng: 139.72731089449988}, id: '4b5edd97f964a520849b29e3'}
-]
+];
 
 // Global map and infowindow variables
 var map;
@@ -310,12 +300,12 @@ function Restaurant(data) {
   }).done(function(jsonData){
     self.content = '<h4>' + self.title() + '</h4>';
     self.content += '<img src="' + jsonData.response.venue.bestPhoto.prefix + '90x90' + jsonData.response.venue.bestPhoto.suffix +'">';
-    self.content += '<hr>'
-    self.content += '<div>' + jsonData.response.venue.categories[0].name + '</div>'
-    self.content += '<div>' + jsonData.response.venue.location.address + '</div>'
-    self.content += '<div>' + jsonData.response.venue.contact.formattedPhone + '</div>'
+    self.content += '<hr>';
+    self.content += '<div>' + jsonData.response.venue.categories[0].name + '</div>';
+    self.content += '<div>' + jsonData.response.venue.location.address + '</div>';
+    self.content += '<div>' + jsonData.response.venue.contact.formattedPhone + '</div>';
   }).fail(function(){
-    self.content = '<h4>Info not found.</h4>'
+    self.content = '<h4>Info not found.</h4>';
   });
 
   // Set marker click event
@@ -331,7 +321,7 @@ function Restaurant(data) {
   // Trigger marker click event from the list
   self.listClick = function() {
     google.maps.event.trigger(self.marker, 'click');
-  }
+  };
 }
 
 // Knockout viewModel
